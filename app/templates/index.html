@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FastAPI Chat</title>
+    <link rel="stylesheet" href="/app/static/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script>
+		var username = "{{ user['username'] if user else '' }}";  // ✅ Ensure Jinja renders username
+		var displayName = "{{ user['display_name'] if user else '' }}";
+	</script>
+	<script src="{{ url_for('static', path='/script.js') }}"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex justify-center items-center h-screen">
+    <div class="w-full max-w-md bg-white shadow-lg rounded-lg p-4">
+        <h2 class="text-lg font-bold mb-2">Live Chat</h2>
+
+        {% if user %}
+            <div class="flex items-center mb-2">
+                <img src="/static/avatars/{{ user.username }}.png" onerror="this.onerror=null; this.src='/static/avatars/default.png';"
+     class="w-12 h-12 rounded-full border border-gray-300">
+
+                <span class="font-semibold">{{ user['display_name'] }}</span>
+            </div>
+            <div class="flex justify-between mb-2">
+                <a href="/settings" class="text-blue-500 text-sm">Settings</a>
+                <a href="/logout" class="text-red-500 text-sm">Logout</a>
+            </div>
+            
+            <!-- Chat Messages -->
+           <div id="chatBox" class="overflow-auto h-64">
+			  {% set last_sender = None %}
+			  {% for message in chat_history %}
+				{% if last_sender != message.sender %}
+				  <div class="flex items-center space-x-2 mt-2">
+					<img src="/static/avatars/{{ message.sender }}.png"
+						 onerror="this.onerror=null; this.src='/static/avatars/default.png';"
+						 class="w-8 h-8 rounded-full border border-gray-300">
+					<strong>{{ message.sender }}</strong>
+				  </div>
+				{% endif %}
+				<div class="ml-10 mb-1 bg-gray-200 rounded-lg px-2 py-1 inline-block">
+				  {{ message.text }}
+				</div>
+				{% set last_sender = message.sender %}
+			  {% endfor %}
+			</div>
+
+
+
+            <!-- Message Input -->
+            <input type="text" id="messageInput" class="w-full p-2 border rounded" placeholder="Type a message...">
+            <button id="sendButton" class="w-full bg-blue-500 text-white p-2 rounded mt-2">Send</button>
+
+			<!-- List of online users -->
+			<div class="p-4 border rounded bg-white shadow-md">
+				<h3 class="text-lg font-bold mb-2">Online Users</h3>
+				<ul id="onlineUsersList"></ul>
+			</div>
+        {% else %}
+            <!-- Login Section -->
+            <h3 class="text-md font-semibold mb-2">Login</h3>
+            <form action="/login" method="post">
+                <input type="text" name="username" placeholder="Username" class="w-full p-2 border rounded mb-2" required>
+                <input type="password" name="password" placeholder="Password" class="w-full p-2 border rounded mb-2" required>
+                <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded">Login</button>
+            </form>
+            <p class="text-center mt-2">or</p>
+            <a href="/auth/google/login" class="block text-center text-blue-500 text-sm">Login with Google</a>
+            <br>
+            <a href="/register" class="block text-center text-green-500 text-sm">Register</a>
+        {% endif %}
+    </div>
+</body>
+</html>
