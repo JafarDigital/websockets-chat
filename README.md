@@ -20,11 +20,9 @@ A real-time chat application built using FastAPI and WebSockets.
 5. You can now access your chat app via the web browser. To access from another device, replace localhost with your machine's local IP address.
 
 ## Technologies Used
-FastAPI
-WebSockets
-SQLite
-SQLAlchemy
-Tailwind CSS (via CDN)
+FastAPI, 
+WebSockets, 
+SQLite, 
+SQLAlchemy, 
+Tailwind CSS (via CDN), 
 yaml
-نسخ
-تحر
