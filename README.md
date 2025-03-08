@@ -27,10 +27,4 @@ SQLAlchemy
 Tailwind CSS (via CDN)
 yaml
 نسخ
-تحرير
-
----
-
-# websockets-chat
-# websockets-chat
-# websockets-chat
+تحر
